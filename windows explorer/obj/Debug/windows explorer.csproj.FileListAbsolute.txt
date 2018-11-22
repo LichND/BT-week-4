@@ -1,0 +1,11 @@
+C:\Users\Admin\source\repos\3.2\windows explorer\bin\Debug\windows explorer.exe.config
+C:\Users\Admin\source\repos\3.2\windows explorer\bin\Debug\windows explorer.exe
+C:\Users\Admin\source\repos\3.2\windows explorer\bin\Debug\windows explorer.pdb
+C:\Users\Admin\source\repos\3.2\windows explorer\obj\Debug\windows explorer.csprojAssemblyReference.cache
+C:\Users\Admin\source\repos\3.2\windows explorer\obj\Debug\windows_explorer.Form1.resources
+C:\Users\Admin\source\repos\3.2\windows explorer\obj\Debug\windows_explorer.Properties.Resources.resources
+C:\Users\Admin\source\repos\3.2\windows explorer\obj\Debug\windows explorer.csproj.GenerateResource.cache
+C:\Users\Admin\source\repos\3.2\windows explorer\obj\Debug\windows explorer.csproj.CoreCompileInputs.cache
+C:\Users\Admin\source\repos\3.2\windows explorer\obj\Debug\windows explorer.exe
+C:\Users\Admin\source\repos\3.2\windows explorer\obj\Debug\windows explorer.pdb
+C:\Users\Admin\source\repos\3.2\windows explorer\obj\Debug\windows_explorer.Rename.resources
