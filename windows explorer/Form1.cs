@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.IO;
@@ -20,15 +21,12 @@ namespace windows_explorer
         {
             COPY , CUT , NONE
         }
-        private Point delta;
         private List<string> srcFile;
         private typePaste Paste;
         #endregion
         
         public Form1()
         {
-            delta.X = 10;
-            delta.Y = 81;
             InitializeComponent();
         }
 
@@ -132,10 +130,17 @@ namespace windows_explorer
             }
             else
             {
-                if (e == typePaste.COPY)
-                    File.Copy(src, des + src.Substring(parent.Length));
-                else
-                    File.Move(src, des + src.Substring(parent.Length));
+                try
+                {
+                    if (e == typePaste.COPY)
+                        File.Copy(src, des + src.Substring(parent.Length));
+                    else
+                        File.Move(src, des + src.Substring(parent.Length));
+                }
+                catch
+                {
+                    MessageBox.Show("Can't paste this file with a same name");
+                }
                 return;
             }
             // copy all file and folder inside this folder
@@ -145,7 +150,6 @@ namespace windows_explorer
             {
                 for (int i = 0; i < ListFolder.Length; i++)
                     AfterPaste(ListFolder[i], des, e, sub + name);
-
 
                 for (int i = 0; i < ListFile.Length; i++)
                     File.Copy(ListFile[i], des + sub + name + ListFile[i].Substring(Directory.GetParent(ListFile[i]).FullName.Length));
@@ -201,10 +205,7 @@ namespace windows_explorer
                 loadSubFolder(folder);
             loadFolderAndFile(selectedNode);
             selectedNode.Expand();
-
-            try
-            { FullLinkPath.Text = treeView1.SelectedNode.FullPath.Remove(0, 12); }
-            catch { };
+            toolStripStatusLabel1.Text = listView1.Items.Count.ToString() + " item(s)";
         }
 
         #region Event button
@@ -213,16 +214,17 @@ namespace windows_explorer
             TreeNode now = treeView1.SelectedNode;
             try
             {
-                now.Collapse();
                 now = now.Parent;
                 loadFolderAndFile(now);
                 treeView1.SelectedNode = now;
+                toolStripStatusLabel1.Text = now.Nodes.Count.ToString() + " item(s)";
+                now.Collapse();
             }
             catch
             {
-                MessageBox.Show("Access Denied");
+
+                MessageBox.Show("Access Denied", "Access Denied", MessageBoxButtons.OK, MessageBoxIcon.Error);
             };
-            toolStripStatusLabel1.Text = now.Nodes.Count.ToString() + " item(s)";
         }
         private void ButtonRefresh_Click(object sender, EventArgs e)
         {
@@ -357,10 +359,10 @@ namespace windows_explorer
         }
         
 
-        private void listView1_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right) contextMenuStrip1.Show(e.Location.X + Location.X + splitContainer1.SplitterDistance + splitContainer1.SplitterRectangle.Width + delta.X, e.Location.Y + Location.Y + delta.Y);
-        }
+        //private void listView1_MouseUp(object sender, MouseEventArgs e)
+        //{
+        //    if (e.Button == MouseButtons.Right) contextMenuStrip1.Show(e.Location.X + Location.X + splitContainer1.SplitterDistance + splitContainer1.SplitterRectangle.Width + delta.X, e.Location.Y + Location.Y + delta.Y);
+        //}
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -383,17 +385,19 @@ namespace windows_explorer
                     loadFolderAndFile(node);
                     node.Expand();
                     treeView1.SelectedNode = node;
-
-                    try
-                    { FullLinkPath.Text = treeView1.SelectedNode.FullPath.Remove(0, 12); }
-                    catch { };
-
                     if (!node.IsExpanded)
                         return;
-
                     return;
                 }
-            MessageBox.Show("Sorry I can't open this file now", "Sory");
+            string link = treeView1.SelectedNode.FullPath.Remove(0, 12) + '\\' + listView1.SelectedItems[0].Text;
+            try
+            {
+                Process.Start(link);
+            }
+            catch
+            {
+                MessageBox.Show("This file can't be opened!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         #endregion
         // right mouse
